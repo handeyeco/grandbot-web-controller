@@ -57,6 +57,10 @@ const ccControls: ReadonlyArray<Omit<CCControl, "value">> = [
   },
 ];
 
+function getRandomInt(max: number) {
+  return Math.floor(Math.random() * max);
+}
+
 function formatInitialState(
   base: ReadonlyArray<Omit<CCControl, "value">>
 ): ReadonlyArray<CCControl> {
@@ -97,6 +101,16 @@ function App() {
     }
   }
 
+  function randomize() {
+    const next = ccs.map((e) => {
+      return {
+        ...e,
+        value: getRandomInt(128),
+      };
+    });
+    setCcs(next);
+  }
+
   function sendAll() {
     ccs.forEach((e) => {
       sendCC(e.cc, e.value);
@@ -126,9 +140,9 @@ function App() {
   }
 
   return (
-    <>
+    <div className="grid">
       <label>
-        Inputs
+        MIDI Inputs
         <select onChange={(e) => selectInputById(e.target.value)}>
           <option value="" disabled selected>
             -
@@ -144,7 +158,7 @@ function App() {
       </label>
 
       <label>
-        Outputs
+        MIDI Outputs
         <select onChange={(e) => selectOutputById(e.target.value)}>
           <option value="" disabled selected>
             -
@@ -159,7 +173,7 @@ function App() {
         </select>
       </label>
 
-      {output && (
+      {output ? (
         <>
           {ccs.map((e) => {
             return (
@@ -170,11 +184,14 @@ function App() {
               />
             );
           })}
+          <button onClick={randomize}>Randomize</button>
           <button onClick={sendAll}>Send All</button>
           <button onClick={panic}>Panic</button>
         </>
+      ) : (
+        <p>Select an output to get started</p>
       )}
-    </>
+    </div>
   );
 }
 
