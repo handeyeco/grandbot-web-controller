@@ -13,6 +13,10 @@ button {
   margin: 1rem;
 }
 
+select {
+  width: 100%;
+}
+
 .grid {
   font-size: 1.4rem;
   max-width: 600px;

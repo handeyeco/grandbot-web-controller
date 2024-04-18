@@ -129,8 +129,11 @@ function App() {
     <div className="grid">
       <label>
         MIDI Inputs
-        <select onChange={(e) => selectInputById(e.target.value)}>
-          <option value="" disabled selected>
+        <select
+          onChange={(e) => selectInputById(e.target.value)}
+          defaultValue=""
+        >
+          <option value="" disabled>
             -
           </option>
           {inputOptions.map((e) => {
@@ -145,8 +148,11 @@ function App() {
 
       <label>
         MIDI Outputs
-        <select onChange={(e) => selectOutputById(e.target.value)}>
-          <option value="" disabled selected>
+        <select
+          onChange={(e) => selectOutputById(e.target.value)}
+          defaultValue=""
+        >
+          <option value="" disabled>
             -
           </option>
           {outputOptions.map((e) => {
