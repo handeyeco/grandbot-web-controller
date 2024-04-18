@@ -1,6 +1,7 @@
 select,
 input {
   display: block;
+  width: 100%;
 }
 
 label {
@@ -11,10 +12,6 @@ label {
 
 button {
   margin: 1rem;
-}
-
-select {
-  width: 100%;
 }
 
 .grid {
