@@ -3,59 +3,7 @@ import "./App.css";
 import Control from "./components/Control";
 import useMidi from "./hooks/useMidi";
 import { CCControl } from "./type";
-
-const initialSequenceControls: ReadonlyArray<Omit<CCControl, "value">> = [
-  {
-    name: "Note length",
-    cc: 20,
-    initialValue: 0,
-  },
-  {
-    name: "Sequence length",
-    cc: 21,
-    initialValue: 0,
-  },
-  {
-    name: "Octave: one up",
-    cc: 22,
-    initialValue: 0,
-  },
-  {
-    name: "Octave: one down",
-    cc: 23,
-    initialValue: 0,
-  },
-  {
-    name: "Octave: two up",
-    cc: 24,
-    initialValue: 0,
-  },
-  {
-    name: "Octave: two down",
-    cc: 25,
-    initialValue: 0,
-  },
-  {
-    name: "Double length",
-    cc: 26,
-    initialValue: 0,
-  },
-  {
-    name: "Ratchet",
-    cc: 27,
-    initialValue: 0,
-  },
-  {
-    name: "Rest",
-    cc: 28,
-    initialValue: 0,
-  },
-  {
-    name: "Speaker",
-    cc: 119,
-    initialValue: 0,
-  },
-];
+import { initialGlobalControls, initialSequenceControls } from "./control-data";
 
 function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
@@ -73,6 +21,9 @@ function formatInitialState(
 function App() {
   const [sequenceControls, setSequenceControls] = useState(
     formatInitialState(initialSequenceControls)
+  );
+  const [globalControls, setGlobalControls] = useState(
+    formatInitialState(initialGlobalControls)
   );
   const {
     inputOptions,
@@ -119,14 +70,18 @@ function App() {
     });
   }
 
+  function sendMomentary(cc: number) {
+    sendCC(cc, 127);
+
+    setTimeout(() => {
+      sendCC(cc, 0);
+    }, 50);
+  }
+
   function panic() {
     if (!output) return;
 
-    sendCC(117, 127);
-
-    setTimeout(() => {
-      sendCC(117, 0);
-    }, 50);
+    sendMomentary(117);
 
     for (let ch = 0; ch < 16; ch++) {
       const command = 0x80 + ch;
@@ -136,15 +91,28 @@ function App() {
     }
   }
 
-  function handleCCChange(cc: number, value: number) {
+  function handleCCChange(
+    cc: number,
+    value: number,
+    map: ReadonlyArray<CCControl>,
+    setter: (next: ReadonlyArray<CCControl>) => void
+  ) {
     sendCC(cc, value);
-    const next = sequenceControls.map((e) => {
+    const next = map.map((e) => {
       return {
         ...e,
         value: e.cc === cc ? value : e.value,
       };
     });
-    setSequenceControls(next);
+    setter(next);
+  }
+
+  function handleSeqParamChange(cc: number, value: number) {
+    handleCCChange(cc, value, sequenceControls, setSequenceControls);
+  }
+
+  function handleGlobalParamChange(cc: number, value: number) {
+    handleCCChange(cc, value, globalControls, setGlobalControls);
   }
 
   return (
@@ -188,13 +156,24 @@ function App() {
               <Control
                 key={e.cc}
                 control={e}
-                onChange={(value) => handleCCChange(e.cc, value)}
+                onChange={(value) => handleSeqParamChange(e.cc, value)}
               />
             );
           })}
+          <div></div>
           <button onClick={randomize}>Randomize</button>
           <button onClick={sendAll}>Send All</button>
+          <button onClick={() => sendMomentary(118)}>Generate</button>
           <button onClick={panic}>Panic</button>
+          {globalControls.map((e) => {
+            return (
+              <Control
+                key={e.cc}
+                control={e}
+                onChange={(value) => handleGlobalParamChange(e.cc, value)}
+              />
+            );
+          })}
         </>
       ) : (
         <p>Select an output to get started</p>
