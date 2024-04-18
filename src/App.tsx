@@ -56,12 +56,15 @@ function App() {
 
   function randomize() {
     const next = sequenceControls.map((e) => {
+      const coinFlip = Math.random() > 0.5
+      const shouldRandomize = !e.excludeFromRandom && coinFlip
       return {
         ...e,
-        value: getRandomInt(128),
+        value: shouldRandomize ? getRandomInt(128) : 0,
       };
     });
     setSequenceControls(next);
+    return next;
   }
 
   function reset() {
@@ -74,10 +77,11 @@ function App() {
     setSequenceControls(next);
   }
 
-  function sendAll() {
-    sequenceControls.forEach((e) => {
+  function sendAll(controls: ReadonlyArray<CCControl>) {
+    controls.map(e => {
       sendCC(e.cc, e.value);
-    });
+
+    })
   }
 
   function sendMomentary(cc: number) {
@@ -86,6 +90,16 @@ function App() {
     setTimeout(() => {
       sendCC(cc, 0);
     }, 50);
+  }
+
+  function generate() {
+    sendMomentary(118);
+  }
+
+  function randomSendGenerate() {
+    const next = randomize();
+    sendAll(next);
+    generate();
   }
 
   function panic() {
@@ -177,10 +191,11 @@ function App() {
             );
           })}
           <div></div>
-          <button onClick={reset}>Reset</button>
+          <button onClick={randomSendGenerate}>Randomize, Send, Generate</button>
           <button onClick={randomize}>Randomize</button>
-          <button onClick={sendAll}>Send All</button>
-          <button onClick={() => sendMomentary(118)}>Generate</button>
+          <button onClick={() => sendAll(sequenceControls)}>Send All</button>
+          <button onClick={generate}>Generate</button>
+          <button onClick={reset}>Reset</button>
           <button onClick={panic}>Panic</button>
           <div></div>
           {globalControls.map((e) => {

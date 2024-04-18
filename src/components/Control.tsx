@@ -1,4 +1,5 @@
 import { CCControl } from "../type";
+import "./Control.css";
 
 type Props = {
   control: CCControl;
@@ -13,7 +14,10 @@ export default function Control(props: Props) {
 
   return (
     <label>
-      {props.control.name}
+      <div className="flex">
+        <span>{props.control.name}</span>
+        <span>{props.control.gbDisplay}</span>
+      </div>
       <input
         type="range"
         min="0"
