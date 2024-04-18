@@ -64,6 +64,16 @@ function App() {
     setSequenceControls(next);
   }
 
+  function reset() {
+    const next = sequenceControls.map((e) => {
+      return {
+        ...e,
+        value: 0,
+      };
+    });
+    setSequenceControls(next);
+  }
+
   function sendAll() {
     sequenceControls.forEach((e) => {
       sendCC(e.cc, e.value);
@@ -161,10 +171,12 @@ function App() {
             );
           })}
           <div></div>
+          <button onClick={reset}>Reset</button>
           <button onClick={randomize}>Randomize</button>
           <button onClick={sendAll}>Send All</button>
           <button onClick={() => sendMomentary(118)}>Generate</button>
           <button onClick={panic}>Panic</button>
+          <div></div>
           {globalControls.map((e) => {
             return (
               <Control
