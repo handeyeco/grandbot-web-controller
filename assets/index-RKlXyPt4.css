@@ -1,0 +1,1 @@
+select,input{display:block;width:100%}label{display:block;padding:2rem 1rem;font-size:1.2rem}button{margin:1rem}.grid{font-size:1.4rem;max-width:600px;margin:5rem auto;display:grid;grid-template-columns:1fr 1fr}@media only screen and (max-width: 600px){.grid{grid-template-columns:1fr}button,select{padding:1rem}}html,body{margin:0;font-size:10px}
