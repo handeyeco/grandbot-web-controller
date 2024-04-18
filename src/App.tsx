@@ -4,7 +4,7 @@ import Control from "./components/Control";
 import useMidi from "./hooks/useMidi";
 import { CCControl } from "./type";
 
-const ccControls: ReadonlyArray<Omit<CCControl, "value">> = [
+const initialSequenceControls: ReadonlyArray<Omit<CCControl, "value">> = [
   {
     name: "Note length",
     cc: 20,
@@ -52,7 +52,7 @@ const ccControls: ReadonlyArray<Omit<CCControl, "value">> = [
   },
   {
     name: "Speaker",
-    cc: 31,
+    cc: 119,
     initialValue: 0,
   },
 ];
@@ -71,7 +71,9 @@ function formatInitialState(
 }
 
 function App() {
-  const [ccs, setCcs] = useState(formatInitialState(ccControls));
+  const [sequenceControls, setSequenceControls] = useState(
+    formatInitialState(initialSequenceControls)
+  );
   const {
     inputOptions,
     outputOptions,
@@ -102,23 +104,29 @@ function App() {
   }
 
   function randomize() {
-    const next = ccs.map((e) => {
+    const next = sequenceControls.map((e) => {
       return {
         ...e,
         value: getRandomInt(128),
       };
     });
-    setCcs(next);
+    setSequenceControls(next);
   }
 
   function sendAll() {
-    ccs.forEach((e) => {
+    sequenceControls.forEach((e) => {
       sendCC(e.cc, e.value);
     });
   }
 
   function panic() {
     if (!output) return;
+
+    sendCC(117, 127);
+
+    setTimeout(() => {
+      sendCC(117, 0);
+    }, 50);
 
     for (let ch = 0; ch < 16; ch++) {
       const command = 0x80 + ch;
@@ -130,13 +138,13 @@ function App() {
 
   function handleCCChange(cc: number, value: number) {
     sendCC(cc, value);
-    const next = ccs.map((e) => {
+    const next = sequenceControls.map((e) => {
       return {
         ...e,
         value: e.cc === cc ? value : e.value,
       };
     });
-    setCcs(next);
+    setSequenceControls(next);
   }
 
   return (
@@ -175,7 +183,7 @@ function App() {
 
       {output ? (
         <>
-          {ccs.map((e) => {
+          {sequenceControls.map((e) => {
             return (
               <Control
                 key={e.cc}
