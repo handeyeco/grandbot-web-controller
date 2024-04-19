@@ -194,8 +194,9 @@ function App() {
           <button onClick={randomSendGenerate}>Randomize, Send, Generate</button>
           <button onClick={randomize}>Randomize</button>
           <button onClick={() => sendAll(sequenceControls)}>Send All</button>
-          <button onClick={generate}>Generate</button>
           <button onClick={reset}>Reset</button>
+          <button onClick={generate}>Generate</button>
+          <button onClick={() => sendMomentary(120)}>Slip</button>
           <button onClick={panic}>Panic</button>
           <div></div>
           {globalControls.map((e) => {
