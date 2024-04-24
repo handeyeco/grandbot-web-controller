@@ -21,7 +21,7 @@ export const initialGlobalControls: ReadonlyArray<Omit<CCControl, "value">> = [
   },
   {
     name: "Slip chance",
-    cc: 88,
+    cc: 89,
     initialValue: 0,
     gbDisplay: "SC",
   },

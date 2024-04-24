@@ -196,7 +196,7 @@ function App() {
           <button onClick={() => sendAll(sequenceControls)}>Send All</button>
           <button onClick={reset}>Reset</button>
           <button onClick={generate}>Generate</button>
-          <button onClick={() => sendMomentary(120)}>Slip</button>
+          <button onClick={() => sendMomentary(90)}>Slip</button>
           <button onClick={panic}>Panic</button>
           <div></div>
           {globalControls.map((e) => {
