@@ -14,6 +14,12 @@ export const initialGlobalControls: ReadonlyArray<Omit<CCControl, "value">> = [
     gbDisplay: "ot",
   },
   {
+    name: "Swing",
+    cc: 115,
+    initialValue: 0,
+    gbDisplay: "SG",
+  },
+  {
     name: "Speaker",
     cc: 119,
     initialValue: 0,

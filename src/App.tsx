@@ -140,78 +140,83 @@ function App() {
   }
 
   return (
-    <div className="grid">
-      <label>
-        MIDI Inputs
-        <select
-          onChange={(e) => selectInputById(e.target.value)}
-          defaultValue=""
-        >
-          <option value="" disabled>
-            -
-          </option>
-          {inputOptions.map((e) => {
-            return (
-              <option key={e.id} value={e.id}>
-                {e.name}
-              </option>
-            );
-          })}
-        </select>
-      </label>
+    <div className="container">
+      <div>
+        <p>A web app to control <a href="https://github.com/handeyeco/Grandbot" target="_blank">Grandbot's</a> arp parameters.</p>
+        <p>Chrome recommended (some browsers have trouble with Web MIDI).</p>
+        <p>Select an output to get started.</p>
+      </div>
+      <div className="grid">
+        <label>
+          MIDI Inputs
+          <select
+            onChange={(e) => selectInputById(e.target.value)}
+            defaultValue=""
+          >
+            <option value="" disabled>
+              -
+            </option>
+            {inputOptions.map((e) => {
+              return (
+                <option key={e.id} value={e.id}>
+                  {e.name}
+                </option>
+              );
+            })}
+          </select>
+        </label>
 
-      <label>
-        MIDI Outputs
-        <select
-          onChange={(e) => selectOutputById(e.target.value)}
-          defaultValue=""
-        >
-          <option value="" disabled>
-            -
-          </option>
-          {outputOptions.map((e) => {
-            return (
-              <option key={e.id} value={e.id}>
-                {e.name}
-              </option>
-            );
-          })}
-        </select>
-      </label>
+        <label>
+          MIDI Outputs
+          <select
+            onChange={(e) => selectOutputById(e.target.value)}
+            defaultValue=""
+          >
+            <option value="" disabled>
+              -
+            </option>
+            {outputOptions.map((e) => {
+              return (
+                <option key={e.id} value={e.id}>
+                  {e.name}
+                </option>
+              );
+            })}
+          </select>
+        </label>
 
-      {output ? (
-        <>
-          {sequenceControls.map((e) => {
-            return (
-              <Control
-                key={e.cc}
-                control={e}
-                onChange={(value) => handleSeqParamChange(e.cc, value)}
-              />
-            );
-          })}
-          <div></div>
-          <button onClick={randomSendGenerate}>Randomize, Send, Generate</button>
-          <button onClick={randomize}>Randomize</button>
-          <button onClick={() => sendAll(sequenceControls)}>Send All</button>
-          <button onClick={reset}>Reset</button>
-          <button onClick={generate}>Generate</button>
-          <button onClick={() => sendMomentary(116)}>Slip</button>
-          <button onClick={panic}>Panic</button>
-          <div></div>
-          {globalControls.map((e) => {
-            return (
-              <Control
-                key={e.cc}
-                control={e}
-                onChange={(value) => handleGlobalParamChange(e.cc, value)}
-              />
-            );
-          })}
-        </>
-      ) : (
-        <p>Select an output to get started</p>
-      )}
+        {output && (
+          <>
+            {sequenceControls.map((e) => {
+              return (
+                <Control
+                  key={e.cc}
+                  control={e}
+                  onChange={(value) => handleSeqParamChange(e.cc, value)}
+                />
+              );
+            })}
+            <div></div>
+            <button onClick={randomSendGenerate}>Randomize, Send, Generate</button>
+            <button onClick={randomize}>Randomize</button>
+            <button onClick={() => sendAll(sequenceControls)}>Send All</button>
+            <button onClick={reset}>Reset</button>
+            <button onClick={generate}>Generate</button>
+            <button onClick={() => sendMomentary(116)}>Slip</button>
+            <button onClick={panic}>Panic</button>
+            <div></div>
+            {globalControls.map((e) => {
+              return (
+                <Control
+                  key={e.cc}
+                  control={e}
+                  onChange={(value) => handleGlobalParamChange(e.cc, value)}
+                />
+              );
+            })}
+          </>
+        )}
+      </div>
     </div>
   );
 }

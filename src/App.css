@@ -14,10 +14,13 @@ button {
   margin: 1rem;
 }
 
-.grid {
+.container {
   font-size: 1.4rem;
   max-width: 600px;
   margin: 5rem auto;
+}
+
+.grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
