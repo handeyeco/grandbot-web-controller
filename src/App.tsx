@@ -196,7 +196,6 @@ function App() {
                 />
               );
             })}
-            <div></div>
             <button onClick={randomSendGenerate}>Randomize, Send, Generate</button>
             <button onClick={randomize}>Randomize</button>
             <button onClick={() => sendAll(sequenceControls)}>Send All</button>
